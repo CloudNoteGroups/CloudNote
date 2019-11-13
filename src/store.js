@@ -5,11 +5,31 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    token:null
+    token:null,
+    user:{
+      area: null,
+      avatar: null,
+      email: null,
+      gender: null,
+      login_time: null,
+      mobile: null,
+      name: null,
+      registered_time: null,
+      status: null,
+      user_id: null,
+      username: ""
+    }
   },
   getters:{
     getToken(state){
       return window.sessionStorage.getItem('token');
+    },
+    getUserInfo(state){
+      let user = window.sessionStorage.getItem('user');
+      if (!user){
+        return false;
+      }
+      return JSON.parse(user);
     }
   },
   mutations: {
@@ -19,6 +39,11 @@ export default new Vuex.Store({
     },
     clearToken(state){
       window.sessionStorage.clear()
+    },
+    changeUser(state,user){
+      let json_user = JSON.stringify(user);
+      window.sessionStorage.setItem('user',json_user);
+      state.user = user;
     }
   },
   actions: {
