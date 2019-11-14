@@ -48,11 +48,36 @@ const NoteList = (folder_id)=>{
     method:'get',
   }).then()
 };
-
+const SaveNote = (noteId,title,content)=>{
+    let url = '/api/v1/note/'+noteId;
+    return Request({
+      url:url,
+      method:'put',
+      data:{
+        note_id:noteId,
+        title,
+        content
+      }
+    }).then()
+};
+const AddNote = (folder_id,title,content)=>{
+  let url = '/api/v1/note';
+  return Request({
+    url:url,
+    method:'post',
+    data:{
+      title,
+      content,
+      folder_id
+    }
+  }).then()
+};
 export default{
   Login,
   Request,
   Register,
   UserInfo,
-  NoteList
+  NoteList,
+  SaveNote,
+  AddNote
 }

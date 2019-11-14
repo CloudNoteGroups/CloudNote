@@ -4,7 +4,6 @@
       <el-aside :style="{height:height+'px',width:'200px'}" class="aside">
         <el-col>
           <el-menu
-            default-active="2"
             class="el-menu-vertical-demo"
           >
             <el-submenu index="1">
