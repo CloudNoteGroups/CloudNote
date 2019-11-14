@@ -22,10 +22,10 @@ export default new Vuex.Store({
   },
   getters:{
     getToken(state){
-      return window.sessionStorage.getItem('token');
+      return window.localStorage.getItem('token');
     },
     getUserInfo(state){
-      let user = window.sessionStorage.getItem('user');
+      let user = window.localStorage.getItem('user');
       if (!user){
         return false;
       }
@@ -34,15 +34,15 @@ export default new Vuex.Store({
   },
   mutations: {
     changeToken(state,token){
-      window.sessionStorage.setItem('token',token);
+      window.localStorage.setItem('token',token);
       state.token = token
     },
     clearToken(state){
-      window.sessionStorage.clear()
+      window.localStorage.clear()
     },
     changeUser(state,user){
       let json_user = JSON.stringify(user);
-      window.sessionStorage.setItem('user',json_user);
+      window.localStorage.setItem('user',json_user);
       state.user = user;
     }
   },

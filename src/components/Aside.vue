@@ -8,14 +8,14 @@
           >
             <el-submenu index="1">
               <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>我的笔记</span>
+                <i class="el-icon-folder-opened"></i>
+                <span>笔记归档</span>
               </template>
               <el-tree style="padding-left:40px;font-size: 20px" :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
             </el-submenu>
-            <el-menu-item index="2">
+            <el-menu-item index="2" @click="allNote">
               <i class="el-icon-menu"></i>
-              <span slot="title">最新文档</span>
+              <span slot="title">所有笔记</span>
             </el-menu-item>
             <el-menu-item index="3">
               <i class="el-icon-setting"></i>
@@ -49,6 +49,9 @@
         methods:{
             handleNodeClick(data,node,tree){
                 this.$emit('folder',data)
+            },
+            allNote(){
+                this.$emit('params','allNote')
             }
         },
         created() {

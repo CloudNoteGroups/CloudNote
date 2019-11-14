@@ -3,11 +3,11 @@
 
     <Header></Header>
     <el-container>
-      <Aside v-on:folder="folderData"></Aside>
+      <Aside v-on:folder="folderData" v-on:params="getParams"></Aside>
       <NoteList :noteList="noteList" :folder="folder" v-if="noteListLength>0" v-on:note="noteData"></NoteList>
       <el-main>
         <div v-if="isShow" style="min-height: 60px">
-          <el-input placeholder="标题" @change="titleChange" v-model="note.title">
+          <el-input placeholder="标题" @change="saveNote" v-model="note.title">
             <template slot="prepend">标题</template>
           </el-input>
         </div>
@@ -67,6 +67,17 @@
                 this.folder = folder;
                 // console.log(this.noteList)
             },
+            getParams(params){
+                switch (params) {
+                    case 'allNote':
+                        this.$api.NoteList().then(response=>{
+                            this.folder = null;
+                            this.noteList = response.data.data;
+                            this.noteListLength = this.noteList.length;
+                        });
+                        break
+                }
+            },
             noteData(note){
                 this.isShow=true;
                 this.note = note
@@ -79,15 +90,16 @@
             saveNote(){
                 this.$api.SaveNote(this.note.note_id,this.note.title,this.note.content)
                     .then(response=>{
-                        console.log(response);
+                        this.$notify({
+                            title: '成功',
+                            message: '保存成功~',
+                            type: 'success',
+                            position: 'bottom-right',
+                            offset:100
+                        });
                     })
             },
-            titleChange(){
-                this.$api.SaveNote(this.note.note_id,this.note.title,this.note.content)
-                    .then(response=>{
-                        console.log(response);
-                    })
-            }
+
 
         }
     }

@@ -72,6 +72,13 @@ const AddNote = (folder_id,title,content)=>{
     }
   }).then()
 };
+const RemoveNote = (note_id)=>{
+  return Request({
+    url:'/api/v1/note/'+note_id,
+    method:'delete',
+  }).then()
+}
+
 export default{
   Login,
   Request,
@@ -79,5 +86,6 @@ export default{
   UserInfo,
   NoteList,
   SaveNote,
-  AddNote
+  AddNote,
+  RemoveNote
 }
