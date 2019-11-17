@@ -71,7 +71,7 @@
                     case 'allNote':
                         this.$api.NoteList().then(response=>{
                             this.folder = null;
-                            this.  = response.data.data;
+                            this.noteList = response.data.data;
                             this.noteListLength = this.noteList.length;
                         });
                         break
