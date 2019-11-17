@@ -18,11 +18,11 @@
               <span slot="title">所有笔记</span>
             </el-menu-item>
             <el-menu-item index="3">
-              <i class="el-icon-setting"></i>
-              <span slot="title">与我分享</span>
+              <i class="el-icon-star-on"></i>
+              <span slot="title">我的收藏</span>
             </el-menu-item>
             <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-delete"></i>
               <span slot="title">回收站</span>
             </el-menu-item>
           </el-menu>

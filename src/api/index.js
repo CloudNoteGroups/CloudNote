@@ -6,7 +6,7 @@ import store  from "../store";
 import router from "../router/index"
 import {use} from "element-ui/src/locale";
 // axios.defaults.withCredentials=true;
-const Request = ({url,data,method})=>{
+const  Request = ({url,data,method})=>{
   let token = store.getters.getToken;
 
   if (!token){
@@ -24,16 +24,17 @@ const Register = ({username,password,email})=>{
     return axios.post('/api/account/register',{username,password,email}).then()
 };
 const UserInfo = ()=>{
-  var user = store.getters.getUserInfo;
-  if (user){
-    return user;
-  }
+  let user = null;
   Request({
     url:'/api/account/user',
     method:'get',
   }).then((response)=>{
-     user = response.data.data;
-     store.commit('changeUser',user)
+    if (response.data.code == 401){
+      this.$router.push('/login')
+    }else{
+      user = response.data.data;
+      store.commit('changeUser',user);
+    }
   });
   return user;
 };

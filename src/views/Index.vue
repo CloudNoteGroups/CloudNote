@@ -55,7 +55,6 @@
         },
         created(){
           this.height = window.innerHeight-170;
-          console.log(this.height)
         },
         methods:{
             folderData(folder){
@@ -72,7 +71,7 @@
                     case 'allNote':
                         this.$api.NoteList().then(response=>{
                             this.folder = null;
-                            this.noteList = response.data.data;
+                            this.  = response.data.data;
                             this.noteListLength = this.noteList.length;
                         });
                         break
