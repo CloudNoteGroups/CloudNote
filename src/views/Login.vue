@@ -76,8 +76,7 @@
                             background: 'rgba(0, 0, 0, 0.7)'
                         });
                         setTimeout(() => {
-                            loading.close();
-                            that.$router.push('/')
+                            window.location.href = '/'
                         }, 2000);
 
                     }else{

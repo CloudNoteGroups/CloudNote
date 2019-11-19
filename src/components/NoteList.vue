@@ -11,8 +11,8 @@
           <i class="el-icon-notebook-1"></i>&nbsp;{{item.title}}
         </div>
         <div class="action" v-show="select_li==item.note_id" >
-          <el-button type="info" icon="el-icon-download" size="mini" circle></el-button>
-          <el-button type="success" icon="el-icon-star-off" size="mini" circle></el-button>
+          <el-button type="info" icon="el-icon-download" size="mini" circle @click="downLoad(item)"></el-button>
+          <el-button type="success" :icon="item.is_collect?'el-icon-star-on':'el-icon-star-off'" size="mini" @click="Collect(item.note_id,item.is_collect)" circle></el-button>
           <el-button type="danger" icon="el-icon-close" size="mini" circle @click="removeNote(item.note_id)"></el-button>
         </div>
       </li>
@@ -24,7 +24,7 @@
 <script>
     export default {
         name: "NoteList",
-        props: ['noteList','folder'],
+        props: ['noteList','folder','dataType'],
         data(){
           return{
               height:700,
@@ -37,7 +37,8 @@
         created() {
             this.height = window.innerHeight-60;
             // this.$emit('note',this.noteList[0]);
-            this.noteList2 = this.noteList
+            this.noteList2 = this.noteList;
+            console.log(this.dataType);
         },
         methods:{
             selectNote(index){
@@ -62,6 +63,21 @@
             selectOut(){
                 this.select_li=null;
             },
+            /**************************
+             * 从noteList中把等于note_id的删除
+             * @param note_id
+             **************************/
+            removeNoteToNoteList(note_id){
+                let index = 0;
+                for (var i=0;i<this.noteList2.length;i++){
+                    if (this.noteList2[i].note_id == note_id){
+                        index = i;
+                        break
+                    }
+                }
+                this.noteList2.splice(index,1);
+                this.index = this.noteList2[0].note_id.toString();
+            },
             removeNote(note_id){
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -70,15 +86,7 @@
                 }).then(() => {
                     this.$api.RemoveNote(note_id).then(response=>{
                           if (response.data.code == 200){
-                              let index = 0;
-                              for (var i=0;i<this.noteList2.length;i++){
-                                  if (this.noteList2[i].note_id == note_id){
-                                      index = i;
-                                      break
-                                  }
-                              }
-                              this.noteList2.splice(index,1);
-                              this.index = this.noteList2[0].note_id.toString();
+                              this.removeNoteToNoteList(note_id)
                               this.$message({
                                   type: 'success',
                                   message: '删除成功!'
@@ -97,6 +105,61 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            Collect(note_id,is_collect){
+                if (is_collect){
+                    this.$confirm('是否取消收藏?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '已从收藏列表中删除!'
+                        });
+                        console.log(this.noteList2);
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消..'
+                        });
+                    });
+                }else{
+                    this.$api.AddCollect(note_id)
+                        .then(result => {
+                            let code = result.data.code;
+                            if (code == 200){
+                                this.$message({
+                                    type: 'success',
+                                    message: '收藏成功~'
+                                });
+                            }else if(code == 201){
+                                this.$message({
+                                    type: 'danger',
+                                    message: result.data.message
+                                });
+                            }
+                        })
+                }
+
+            },
+            downloadFileHelper(fileName, content){
+                const aTag = document.createElement('a');
+                const blob = new Blob([content]);
+
+                aTag.download = fileName;
+                aTag.style = "display: none";
+                aTag.href = URL.createObjectURL(blob);
+                document.body.appendChild(aTag);
+                aTag.click();
+
+                setTimeout(function () {
+                    document.body.removeChild(aTag);
+                    window.URL.revokeObjectURL(blob);
+                }, 100);
+              },
+            downLoad(note){
+                this.downloadFileHelper(note.title+'.md',note.content)
             }
 
         },
@@ -108,6 +171,9 @@
                 let note = res[0];
                 this.$emit('note',note);
             });
+            this.$watch('dataType',res=>{
+                console.log(res);
+            });
             this.$watch('index',res=>{
                 let note = null;
                 for(var i=0;i<this.noteList.length;i++){
@@ -117,7 +183,8 @@
                     }
                 }
                 this.$emit('note',note)
-            })
+            });
+
         },
     }
 </script>

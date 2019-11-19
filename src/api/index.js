@@ -30,7 +30,7 @@ const UserInfo = ()=>{
     method:'get',
   }).then((response)=>{
     if (response.data.code == 401){
-      this.$router.push('/login')
+      router.push('/login')
     }else{
       user = response.data.data;
       store.commit('changeUser',user);
@@ -78,15 +78,33 @@ const RemoveNote = (note_id)=>{
     url:'/api/v1/note/'+note_id,
     method:'delete',
   }).then()
-}
+};
+const AddCollect = (note_id)=>{
+  return Request({
+    url:'/api/v1/collect',
+    method:'post',
+    data:{
+      note_id
+    }
+  }).then()
+};
+const CollectList = ()=>{
+  return Request({
+    url:'/api/v1/collect',
+    method:'get',
+  }).then()
+
+};
 
 export default{
-  Login,
-  Request,
-  Register,
-  UserInfo,
-  NoteList,
-  SaveNote,
-  AddNote,
-  RemoveNote
+  Login,                // 登陆
+  Request,              // 带有token的请求
+  Register,             // 注册
+  UserInfo,             // 初始化用户信息
+  NoteList,             // 笔记列表
+  SaveNote,             // 保存笔记
+  AddNote,              // 添加笔记
+  RemoveNote,           // 删除笔记
+  AddCollect,           // 添加收藏
+  CollectList           // 收藏列表
 }

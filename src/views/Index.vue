@@ -4,7 +4,7 @@
     <Header></Header>
     <el-container>
       <Aside v-on:folder="folderData" v-on:params="getParams"></Aside>
-      <NoteList :noteList="noteList" :folder="folder" v-if="noteListLength>0" v-on:note="noteData"></NoteList>
+      <NoteList :noteList="noteList" :dataType="dataType" :folder="folder" v-if="noteListLength>0" v-on:note="noteData"></NoteList>
       <el-main>
         <div v-if="isShow" style="min-height: 60px">
           <el-input placeholder="标题" @change="saveNote" v-model="note.title">
@@ -39,12 +39,11 @@
               note:{
                   title:'',
                   content:'',
-
               },
               html:'',
               height:0,
               isShow:false,
-
+              dataType:'all' // ['all','star','trashcan','folder']
           }
         },
         components:{
@@ -61,6 +60,7 @@
                 this.$api.NoteList(folder.folder_id).then((response)=>{
                     this.noteList = response.data.data;
                     this.noteListLength = this.noteList.length;
+                    this.dataType = 'folder';
                     this.content = ''
                 });
                 this.folder = folder;
@@ -69,12 +69,25 @@
             getParams(params){
                 switch (params) {
                     case 'allNote':
-                        this.$api.NoteList().then(response=>{
+                        this.$api.NoteList().then(result=>{
                             this.folder = null;
-                            this.noteList = response.data.data;
+                            this.noteList = result.data.data;
                             this.noteListLength = this.noteList.length;
+                            this.dataType = 'all';
                         });
-                        break
+                        break;
+                    case 'trashcan':
+                        this.dataType = 'trashcan';
+                        console.log('垃圾箱功能');
+                        break;
+                    case 'star':
+                        this.$api.CollectList().then(result => {
+                            this.folder = null;
+                            this.noteList = result.data.data;
+                            this.noteListLength = this.noteList.length;
+                            this.dataType = 'star';
+                        });
+                        break;
                 }
             },
             noteData(note){
