@@ -1,25 +1,9 @@
 <template>
   <div>
-
     <Header></Header>
     <el-container>
       <Aside v-on:folder="folderData" v-on:params="getParams"></Aside>
-      <NoteList :noteList="noteList" :dataType="dataType" :folder="folder" v-if="noteListLength>0" v-on:note="noteData"></NoteList>
-      <el-main>
-        <div v-if="isShow" style="min-height: 60px">
-          <el-input placeholder="标题" @change="saveNote" v-model="note.title">
-            <template slot="prepend">标题</template>
-          </el-input>
-        </div>
-        <mavon-editor v-if="isShow"
-          v-model="note.content"
-          ref="md"
-          @change="change"
-                      @save="saveNote"
-                      :ishljs="true"
-          :style="{maxHeight:height+'px',minHeight:height+'px'}"
-        />
-      </el-main>
+        <router-view></router-view>
     </el-container>
 
   </div>
@@ -59,12 +43,10 @@
             folderData(folder){
                 this.$api.NoteList(folder.folder_id).then((response)=>{
                     this.noteList = response.data.data;
-                    this.noteListLength = this.noteList.length;
                     this.dataType = 'folder';
                     this.content = ''
                 });
                 this.folder = folder;
-                // console.log(this.noteList)
             },
             getParams(params){
                 switch (params) {
@@ -72,7 +54,7 @@
                         this.$api.NoteList().then(result=>{
                             this.folder = null;
                             this.noteList = result.data.data;
-                            this.noteListLength = this.noteList.length;
+                            this.noteListLength = this.noteList.length==0?1:this.noteList.length;
                             this.dataType = 'all';
                         });
                         break;
@@ -84,7 +66,7 @@
                         this.$api.CollectList().then(result => {
                             this.folder = null;
                             this.noteList = result.data.data;
-                            this.noteListLength = this.noteList.length;
+                            this.noteListLength = this.noteList.length==0?1:this.noteList.length;
                             this.dataType = 'star';
                         });
                         break;
@@ -95,22 +77,7 @@
                 this.note = note
 
             },
-            change(value, render){
-                // render 为 markdown 解析后的结果[html]
-                this.html = render;
-            },
-            saveNote(){
-                this.$api.SaveNote(this.note.note_id,this.note.title,this.note.content)
-                    .then(response=>{
-                        this.$notify({
-                            title: '成功',
-                            message: '保存成功~',
-                            type: 'success',
-                            position: 'bottom-right',
-                            offset:100
-                        });
-                    })
-            },
+
 
 
         }

@@ -29,7 +29,7 @@ const UserInfo = ()=>{
     url:'/api/account/user',
     method:'get',
   }).then((response)=>{
-    if (response.data.code == 401){
+    if (response.data.code === 401){
       router.push('/login')
     }else{
       user = response.data.data;
@@ -96,15 +96,25 @@ const CollectList = ()=>{
 
 };
 
+const NoteDetail = (id)=>{
+    return Request({
+        url:'/api/v1/note/'+id,
+        method:'get'
+    }).then()
+};
+
+
 export default{
-  Login,                // 登陆
-  Request,              // 带有token的请求
-  Register,             // 注册
-  UserInfo,             // 初始化用户信息
-  NoteList,             // 笔记列表
-  SaveNote,             // 保存笔记
-  AddNote,              // 添加笔记
-  RemoveNote,           // 删除笔记
-  AddCollect,           // 添加收藏
-  CollectList           // 收藏列表
+    Login,                // 登陆
+    Request,              // 带有token的请求
+    Register,             // 注册
+    UserInfo,             // 初始化用户信息
+    NoteList,             // 笔记列表
+    SaveNote,             // 保存笔记
+    AddNote,              // 添加笔记
+    RemoveNote,           // 删除笔记
+    AddCollect,           // 添加收藏
+    CollectList,           // 收藏列表
+    NoteDetail,             // 笔记详情
+
 }

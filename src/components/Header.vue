@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-header>
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
         <el-menu-item ><img src="../assets/logo.png"  height="60" alt=""></el-menu-item>
-        <el-menu-item index="home">首页</el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="note">云笔记</el-menu-item>
-        <el-menu-item index="collect">我的收藏</el-menu-item>
+        <el-menu-item index="/index/star" >我的收藏</el-menu-item>
 
         <el-submenu index="center" class="account-center">
           <template slot="title"><el-image
